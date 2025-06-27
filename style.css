@@ -9,3 +9,40 @@ canvas {
   display: block;
   margin: 0 auto;
 }
+
+#startScreen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(135, 206, 250, 0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+  z-index: 2;
+}
+
+#startScreen h1 {
+  font-size: 48px;
+  color: navy;
+  margin-bottom: 20px;
+}
+
+#playButton {
+  padding: 15px 30px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+#countdown {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 72px;
+  font-family: sans-serif;
+  color: white;
+  display: none;
+  z-index: 2;
+}
