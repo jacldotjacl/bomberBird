@@ -8,22 +8,48 @@ const pillarImg = new Image();
 birdImg.src = 'bird.png';
 pillarImg.src = 'pillars.png';
 
-let bird = { x: 50, y: 150, width: 40, height: 40, gravity: 2, lift: -30, velocity: 0 };
+let bird = { x: 50, y: 200, width: 40, height: 40, gravity: 1.2, lift: -20, velocity: 0 };
 let pipes = [];
 let frame = 0;
+let gameStarted = false;
+let countdown = 3;
 
-document.addEventListener('keydown', () => bird.velocity = bird.lift);
+// Title screen logic
+document.getElementById('playButton').addEventListener('click', () => {
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('countdown').style.display = 'block';
+  runCountdown();
+});
+
+function runCountdown() {
+  const countEl = document.getElementById('countdown');
+  const interval = setInterval(() => {
+    countEl.textContent = countdown;
+    countdown--;
+    if (countdown < 0) {
+      clearInterval(interval);
+      countEl.style.display = 'none';
+      gameStarted = true;
+      requestAnimationFrame(gameLoop);
+    }
+  }, 1000);
+}
+
+document.addEventListener('keydown', () => {
+  if (gameStarted) {
+    bird.velocity = bird.lift;
+  }
+});
 
 function drawBird() {
   ctx.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
 }
 
 function drawPipes() {
-  for (let i = 0; i < pipes.length; i++) {
-    let p = pipes[i];
+  pipes.forEach(p => {
     ctx.drawImage(pillarImg, p.x, 0, p.width, p.top);
     ctx.drawImage(pillarImg, p.x, canvas.height - p.bottom, p.width, p.bottom);
-  }
+  });
 }
 
 function updatePipes() {
@@ -37,7 +63,6 @@ function updatePipes() {
       bottom: canvas.height - (top + gap)
     });
   }
-
   pipes.forEach(p => p.x -= 2);
 }
 
@@ -45,7 +70,6 @@ function gameLoop() {
   frame++;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Bird physics
   bird.velocity += bird.gravity;
   bird.y += bird.velocity;
 
@@ -60,5 +84,3 @@ function gameLoop() {
 
   requestAnimationFrame(gameLoop);
 }
-
-birdImg.onload = () => gameLoop();
